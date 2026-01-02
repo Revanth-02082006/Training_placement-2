@@ -1,0 +1,6 @@
+words = ["madam","apple","level","dog"]
+count = 0
+for w in words:
+    if w == w[::-1]:
+        count += 1
+print("Palindromes =", count)
