@@ -1,0 +1,6 @@
+import multiprocessing
+def worker(num): print("Worker",num)
+if __name__=="__main__":
+    for i in range(3):
+        p=multiprocessing.Process(target=worker,args=(i,))
+        p.start(); p.join()
