@@ -1,0 +1,9 @@
+n=3
+m=[[0]*n for _ in range(n)]
+i,j=0,n//2
+for num in range(1,n*n+1):
+    m[i][j]=num
+    ni,nj=(i-1)%n,(j+1)%n
+    if m[ni][nj]:i=(i+1)%n
+    else:i,j=ni,nj
+print(m)
