@@ -1,0 +1,42 @@
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
+
+public class Steganography {
+    public static void hideText(String text, String inputImage, String outputImage) throws Exception {
+        BufferedImage img = ImageIO.read(new File(inputImage));
+        int width = img.getWidth(), height = img.getHeight();
+        int idx = 0;
+
+        for (int y = 0; y < height && idx < text.length(); y++) {
+            for (int x = 0; x < width && idx < text.length(); x++) {
+                int rgb = img.getRGB(x, y);
+                char c = text.charAt(idx++);
+                rgb = (rgb & 0xFFFFFFFE) | (c & 1);
+                img.setRGB(x, y, rgb);
+            }
+        }
+        ImageIO.write(img, "png", new File(outputImage));
+    }
+
+    public static String revealText(String imagePath, int length) throws Exception {
+        BufferedImage img = ImageIO.read(new File(imagePath));
+        int width = img.getWidth(), height = img.getHeight();
+        StringBuilder sb = new StringBuilder();
+        int idx = 0;
+
+        for (int y = 0; y < height && idx < length; y++) {
+            for (int x = 0; x < width && idx < length; x++) {
+                int rgb = img.getRGB(x, y);
+                sb.append((rgb & 1));
+                idx++;
+            }
+        }
+        return sb.toString();
+    }
+
+    public static void main(String[] args) throws Exception {
+        hideText("HELLO", "input.png", "output.png");
+        System.out.println("Hidden text revealed: " + revealText("output.png", 5));
+    }
+}
